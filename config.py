@@ -9,4 +9,5 @@ CHANNEL_ID = os.getenv('CHANNEL_ID', '')
 
 # Bot sozlamalari
 DATABASE_PATH = 'bot_database.db'
+DATABASE_URL = os.getenv('DATABASE_URL')  # PostgreSQL uchun
 MOVIES_PER_PAGE = 10
