@@ -1,0 +1,19 @@
+TELEGRAM KINO BOT - ISHGA TUSHIRISH
+
+1. Kutubxonalarni o'rnatish:
+   pip install -r requirements.txt
+
+2. .env fayl yaratish:
+   copy .env.example .env
+
+3. .env faylini to'ldirish:
+   - BOT_TOKEN=your_bot_token (BotFather dan oling)
+   - ADMIN_IDS=your_telegram_id (userinfobot dan oling)
+
+4. Botni ishga tushirish:
+   python bot.py
+
+TAYYOR! Bot ishlayapti.
+
+Telegram'da botga /start yuboring.
+Admin uchun: /admin
