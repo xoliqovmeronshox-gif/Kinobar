@@ -37,17 +37,20 @@ async def process_broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("📤 Xabar yuborilmoqda...")
     
     # Barcha foydalanuvchilarni olish
-    async with aiosqlite.connect(db.db_path) as database:
-        async with database.execute('SELECT user_id FROM users WHERE is_banned = 0') as cursor:
-            users = await cursor.fetchall()
+    conn = await db.get_connection()
+    try:
+        rows = await conn.fetch('SELECT user_id FROM users WHERE is_banned = 0')
+        users = [row['user_id'] for row in rows]
+    finally:
+        await conn.close()
     
     success = 0
     failed = 0
     
-    for user in users:
+    for user_id in users:
         try:
             await context.bot.send_message(
-                chat_id=user[0],
+                chat_id=user_id,
                 text=f"📢 <b>Xabar:</b>\n\n{message_text}",
                 parse_mode=ParseMode.HTML
             )
@@ -150,15 +153,17 @@ async def list_users(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("❌ Sizda admin huquqi yo'q.")
         return
     
-    async with aiosqlite.connect(db.db_path) as database:
-        database.row_factory = aiosqlite.Row
-        async with database.execute('''
+    conn = await db.get_connection()
+    try:
+        rows = await conn.fetch('''
             SELECT user_id, username, first_name, is_banned, join_date 
             FROM users 
             ORDER BY join_date DESC 
             LIMIT 20
-        ''') as cursor:
-            users = await cursor.fetchall()
+        ''')
+        users = [dict(row) for row in rows]
+    finally:
+        await conn.close()
     
     if not users:
         await update.message.reply_text("📭 Foydalanuvchilar topilmadi.")
@@ -256,7 +261,7 @@ async def process_unban(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     context.user_data.clear()
 
-import aiosqlite
+
 
 
 async def add_admin_start(update: Update, context: ContextTypes.DEFAULT_TYPE):
