@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: kinobot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python bot.py
+    envVars:
+      - key: BOT_TOKEN
+        value: 8213210310:AAEfVfHwlf5_MQ3kkzGldmIp1sEHEvjcnUg
+      - key: ADMIN_ID
+        value: 7819381670
+      - key: CHANNEL_ID
+        value: -1003399011554
+      - key: DATABASE_PATH
+        value: bot_database.db

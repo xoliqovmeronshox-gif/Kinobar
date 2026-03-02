@@ -1,4 +1,6 @@
 import logging
+import asyncio
+import sys
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, InlineQueryHandler, filters
 from config import BOT_TOKEN
 from database import Database
@@ -22,6 +24,14 @@ def main():
     if not BOT_TOKEN:
         logger.error("BOT_TOKEN topilmadi! .env faylini tekshiring.")
         return
+    
+    # Python 3.14 uchun event loop tuzatish
+    if sys.version_info >= (3, 10):
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
     
     # Application yaratish
     app = Application.builder().token(BOT_TOKEN).post_init(post_init).build()
